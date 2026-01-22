@@ -1,0 +1,67 @@
+package com.dominio.customer_service.security;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+
+@Slf4j
+@Component
+public class JwtTokenProvider {
+
+    @Value("${app.jwt.secret}")
+    private String jwtSecretString;
+
+    private SecretKey getSigningKey() {
+        byte[] keyBytes= Base64.getDecoder().decode(jwtSecretString);
+        return  Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token);
+            return true;
+        } catch (Exception ex) {
+            log.error("Invalid JWT token: {}", ex.getMessage());
+        }
+        return false;
+    }
+
+    public String getUsernameFromToken(String token) {
+        return Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
+
+
+    public Collection<? extends GrantedAuthority> getRoleFromToken(String token) {
+
+        Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        // ADMIN, USER
+        // ROLE_ADMIN, ROLE_USER
+        String role = "ROLE_" + claims.get("role", String.class);
+        return Collections.singletonList(new SimpleGrantedAuthority(role));
+    }
+
+
+}
