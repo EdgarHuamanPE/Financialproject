@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,5 +78,13 @@ public class FinancialOriginationService {
 
     public void deleteCustomerProduct(CustomerProduct customerProduct) {
         financialOriginationRepository.delete(costumerProductMapper.toEntity(customerProduct));
+    }
+
+    @Transactional(readOnly = true)
+    public int getLastMonthTotalProducts() {
+        YearMonth lastMonth = YearMonth.now().minusMonths(1);
+        LocalDateTime start = lastMonth.atDay(1).atStartOfDay();
+        LocalDateTime end = lastMonth.atEndOfMonth().atTime(23,59,59);
+        return financialOriginationRepository.countProductsInMonth(start, end);
     }
 }

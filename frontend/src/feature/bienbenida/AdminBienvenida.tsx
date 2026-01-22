@@ -1,6 +1,52 @@
+import { useAuth } from "@/app/providers/AuthProvider";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { countActivacionMes, countCustomerActive ,countProductActive} from "./services/bienvenida.service";
 
 export function AdminBienvenida() {
+      const { token } = useAuth();
+      const [total, setTotal] = useState(0);
+      const [activeCustomers, setActiveCustomers] = useState(0);  
+      const [activeProducts, setActiveProducts] = useState(0);
+
+      useEffect(() => {
+          const loadActivaciones = async () => {
+            if (!token) return;
+
+            try {
+              const data = await countActivacionMes(token);
+              setTotal(data.count);
+            } catch (error) {
+              console.error(error);
+            }
+          };
+          loadActivaciones();
+
+           const loadCustomeractive = async () => {
+            if (!token) return;
+
+            try {
+              const data = await countCustomerActive(token);
+              setActiveCustomers(data.count);
+            } catch (error) {
+              console.error(error);
+            }
+          };
+          loadCustomeractive();
+
+          const loadProductActive = async () => {
+            if (!token) return;
+
+            try {
+              const data = await countProductActive(token);
+              setActiveProducts(data.count);
+            } catch (error) {
+              console.error(error);
+            }
+          };
+          loadProductActive();
+        }, [token]);
+
   return (
     <section className="w-full max-w-6xl mx-auto px-4 py-8">
       {/* Header */}
@@ -8,7 +54,7 @@ export function AdminBienvenida() {
         <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
           Bienvenido al Sistema de Ventas Financieros
         </h1>
-        <p className="mt-2 text-slate-500 max-w-2xl">
+        <p className="mt-2 text-slate-500 max-w-4xl">
           Desde este panel podrás monitorear ventas, gestionar productos
           financieros y analizar el comportamiento de tus clientes.
         </p>
@@ -18,10 +64,10 @@ export function AdminBienvenida() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mb-10">
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <h3 className="text-sm font-medium text-slate-500">
-            Ventas del mes
+            Activaciones del último mes
           </h3>
           <p className="mt-2 text-2xl font-bold text-emerald-600">
-            S/ 45,800
+           { total}
           </p>
           <span className="mt-1 block text-xs text-slate-400">
             Actualizado hoy
@@ -33,10 +79,10 @@ export function AdminBienvenida() {
             Clientes activos
           </h3>
           <p className="mt-2 text-2xl font-bold text-slate-900">
-            1,248
+            {activeCustomers}
           </p>
           <span className="mt-1 block text-xs text-slate-400">
-            Últimos 30 días
+            Activos en el sistema
           </span>
         </div>
 
@@ -45,7 +91,7 @@ export function AdminBienvenida() {
             Productos financieros
           </h3>
           <p className="mt-2 text-2xl font-bold text-slate-900">
-            18
+            {activeProducts}
           </p>
           <span className="mt-1 block text-xs text-slate-400">
             Activos en el sistema

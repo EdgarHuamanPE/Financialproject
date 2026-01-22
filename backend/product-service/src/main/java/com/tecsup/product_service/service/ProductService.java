@@ -58,4 +58,9 @@ public class ProductService {
     public void deleteProduct(Product product) {
         productRepository.delete(productMapper.toEntity(product));
     }
+
+    @Transactional(readOnly = true)
+    public long countActiveProducts() {
+        return productRepository.countActiveProducts();
+    }
 }

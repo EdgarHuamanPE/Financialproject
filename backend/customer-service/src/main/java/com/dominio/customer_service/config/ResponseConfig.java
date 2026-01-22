@@ -10,4 +10,6 @@ public class ResponseConfig {
     public ResponseFactory responseFactory() {
         return new ResponseFactory();
     }
+
+    
 }

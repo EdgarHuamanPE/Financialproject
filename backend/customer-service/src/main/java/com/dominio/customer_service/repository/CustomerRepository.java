@@ -2,6 +2,7 @@ package com.dominio.customer_service.repository;
 
 import com.dominio.customer_service.entity.CustomerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -11,5 +12,8 @@ import java.util.Optional;
 public interface CustomerRepository extends JpaRepository<CustomerEntity,Long> {
     boolean existsByDocumentNumber(String documentNumber);
     Optional<CustomerEntity> findByDocumentNumber(String documentNumber);
+
+    @Query("SELECT COUNT(c) FROM CustomerEntity c WHERE c.status = 'ACTIVO'")
+    long countActiveCustomers();
 
 }

@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -138,5 +139,13 @@ public class ProductController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(response);
         }
+    }
+
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MONITOR')")
+    @GetMapping("/dashboard/product/count")
+    public Map<String, Long> countActiveProducts() {
+        long total = productService.countActiveProducts();
+        return Map.of("count", total);
     }
 }

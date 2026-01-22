@@ -72,4 +72,10 @@ public class CustomerService {
     public void deleteCustomer(Customer customer) {
         customerRepository.delete(customerMapper.toEntity(customer));
     }
+
+    @Transactional(readOnly = true)
+    public long countActiveCustomers() {
+        return customerRepository.countActiveCustomers();
+    }
+    
 }

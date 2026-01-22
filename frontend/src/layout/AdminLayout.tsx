@@ -9,7 +9,7 @@ import {DesktopHeader} from "@/shared/components/DesktopHeader";
 
 export function AdminLayout(){
      
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
     let user = { email: "", role: "", avatarUrl: "" };
 
     if (token) {

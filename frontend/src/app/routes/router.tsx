@@ -4,6 +4,7 @@ import {ProtectedRoute} from "./ProtectedRoute";
 import {Login} from "@/feature/auth/pages/Login";
 import {AdminLayout} from "@/layout/AdminLayout";
 import {AdminBienvenida} from "@/feature/bienbenida/AdminBienvenida";
+import {ProductsPage} from "@/feature/productos/pages/ProductosPage";
 
 
 export const router = createBrowserRouter([
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
         
         children: [
           { index: true, element: <AdminBienvenida/> },
-          { path: "productos", element: <h1>Productos</h1> },
+          { path: "productos", element: <ProductsPage/> },
           { path: "clientes", element: <h1>Clientes</h1> },
           { path: "ventas", element: <h1>Ventas</h1> },
           { path: "productos/reportes", element: <h1>reportes poductos</h1> },

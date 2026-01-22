@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import com.dominio.customer_service.service.CustomerService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -158,5 +159,13 @@ public class CustomerController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(response);
         }
+    }
+
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MONITOR')")
+    @GetMapping("/dashboard/customer/count")
+    public Map<String, Long> countActiveCustomers() {
+        long total = customerService.countActiveCustomers();
+        return Map.of("count", total);
     }
 }

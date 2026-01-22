@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -165,5 +166,12 @@ public class FinancialOriginationController {
         return ResponseEntity.ok( financialOriginationService.getAllCustomerProduct().stream()
                 .map(costumerProductMapper::toResponse)
                 .collect(Collectors.toList()));
+    }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MONITOR')")
+    @GetMapping("/dashboard/mes/activacion")
+    public Map<String, Integer> getLastMonthProducts() {
+        int total = financialOriginationService.getLastMonthTotalProducts();
+        return Map.of("count", total);
     }
 }
