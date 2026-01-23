@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export  function DesktopHeader({ user, logout }: { user: any; logout: () => void }) {
+export function DesktopHeader({ user, logout }: { user: any; logout: () => void }) {
   const [openDropdown, setOpenDropdown] = useState(false);
 
   return (

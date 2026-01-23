@@ -1,19 +1,19 @@
 import { createContext, useContext } from "react";
 
 const modules: AdminModule[] = [
-      {
+  {
     id: "admin",
     title: "Administrador",
     route: "/admin",
     showInDashboard: false,
   },
-  
+
   {
     id: "products",
     title: "Productos",
     description: "Gestión y reportes de productos",
     route: "/admin/productos",
-    reportUrl:"/admin/productos/reportes",
+    reportUrl: "/admin/productos/reportes",
     showInDashboard: true,
   },
   {
@@ -21,7 +21,7 @@ const modules: AdminModule[] = [
     title: "Clientes",
     description: "Análisis de clientes",
     route: "/admin/clientes",
-    reportUrl:"/admin/clientes/reportes",
+    reportUrl: "/admin/clientes/reportes",
     showInDashboard: true,
   },
   {
@@ -29,7 +29,7 @@ const modules: AdminModule[] = [
     title: "Ventas",
     description: "Ingresos y métricas",
     route: "/admin/ventas",
-    reportUrl:"/admin/Ventas/reportes",
+    reportUrl: "/admin/Ventas/reportes",
     showInDashboard: true,
   },
 ];
@@ -40,7 +40,7 @@ export interface AdminModule {
   description?: string;
   route: string;
   showInDashboard: boolean;
-  reportUrl?:string;
+  reportUrl?: string;
 }
 
 interface AdminContextType {

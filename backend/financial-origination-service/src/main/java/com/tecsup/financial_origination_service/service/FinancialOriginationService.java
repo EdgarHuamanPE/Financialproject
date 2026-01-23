@@ -12,6 +12,8 @@ import com.tecsup.financial_origination_service.mapper.CostumerProductMapper;
 import com.tecsup.financial_origination_service.repository.FinancialOriginationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,11 +53,9 @@ public class FinancialOriginationService {
     }
 
     @Transactional(readOnly = true)
-    public List<CustomerProduct> getAllCustomerProduct() {
-        return  financialOriginationRepository.findAll()
-                .stream()
-                .map(this.costumerProductMapper::toDomain)
-                .collect(Collectors.toList());
+    public Page<CustomerProduct> getAllCustomerProduct(Pageable pageable) {
+        return  financialOriginationRepository.findAll(pageable)
+                .map(this.costumerProductMapper::toDomain);
     }
 
 

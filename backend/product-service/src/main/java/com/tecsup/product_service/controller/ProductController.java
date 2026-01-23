@@ -9,6 +9,8 @@ import com.tecsup.product_service.mapper.UpdateProductMapper;
 import com.tecsup.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,10 +57,11 @@ public class ProductController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MONITOR')")
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
-        return ResponseEntity.ok( productService.getAllProducts().stream()
-                .map(productMapper::toResponse)
-                .collect(Collectors.toList()));
+    public ResponseEntity<Page<ProductResponse>> getAllProducts(Pageable pageable) {
+        Page<ProductResponse> response =
+                productService.getAllProducts(pageable)
+                        .map(productMapper::toResponse);
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

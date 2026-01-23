@@ -9,6 +9,8 @@ import com.tecsup.product_service.mapper.ProductMapper;
 import com.tecsup.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +34,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> getAllProducts() {
-        return  productRepository.findAll()
-                .stream()
-                .map(this.productMapper::toDomain)
-                .collect(Collectors.toList());
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return  productRepository.findAll(pageable)
+                .map(productMapper::toDomain);
     }
 
     public Product saveProduct(Product product) {

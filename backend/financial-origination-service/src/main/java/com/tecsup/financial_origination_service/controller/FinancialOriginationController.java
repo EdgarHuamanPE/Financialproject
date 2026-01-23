@@ -11,6 +11,8 @@ import com.tecsup.financial_origination_service.mapper.UpdateCustomerProductMapp
 import com.tecsup.financial_origination_service.service.FinancialOriginationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -162,10 +164,10 @@ public class FinancialOriginationController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MONITOR')")
     @GetMapping
-    public ResponseEntity<List<CustomerProductResponse>> getAllCustomerProduct() {
-        return ResponseEntity.ok( financialOriginationService.getAllCustomerProduct().stream()
-                .map(costumerProductMapper::toResponse)
-                .collect(Collectors.toList()));
+    public ResponseEntity<Page<CustomerProductResponse>> getAllCustomerProduct(Pageable pageable) {
+        Page<CustomerProductResponse> response = financialOriginationService.getAllCustomerProduct(pageable)
+                .map(costumerProductMapper::toResponse);
+        return ResponseEntity.ok( response);
     }
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('MONITOR')")
